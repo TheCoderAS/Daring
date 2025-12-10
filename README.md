@@ -2,6 +2,8 @@
 
 This sketch provides a dual-core ESP32-S3 flight controller that exposes a Wi-Fi hotspot with a simple throttle-only web UI (core 1) while core 0 runs the attitude loop, reads the MPU6050, and drives four BLDC ESCs.
 
+> **Note:** The project now uses a single canonical `README.md` (uppercase) at the repository root to avoid case-only duplicates that can cause merge conflicts on case-insensitive systems.
+
 ## Hardware assumptions
 - ESP32-S3 DevKit
 - MPU6050 IMU on I2C
