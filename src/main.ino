@@ -80,7 +80,11 @@ void handleSet() {
 }
 
 void startWebServer() {
-  WiFi.softAP(kApSsid, kApPassword);
+  if (!WiFi.softAP(kApSsid, kApPassword)) {
+    Serial.println("Failed to start SoftAP");
+    return;
+  }
+  Serial.printf("AP started: SSID=%s IP=%s\n", kApSsid, WiFi.softAPIP().toString().c_str());
   server.on("/", handleRoot);
   server.on("/set", handleSet);
   server.begin();
@@ -129,6 +133,12 @@ void controlTask(void *param) {
     float pitchCorrection = pitchPid.compute(0.0f, imu.pitch(), dt);
     // Yaw hold disabled for now
     float yawCorrection = 0.0f;
+
+    if (desiredThrottle < 1.0f) {
+      rollPid.reset();
+      pitchPid.reset();
+      yawPid.reset();
+    }
 
     // X quad mixing
     float mFrontLeft = throttleDuty + pitchCorrection - rollCorrection - yawCorrection;
